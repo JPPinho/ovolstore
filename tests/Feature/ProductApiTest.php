@@ -124,6 +124,34 @@ class ProductApiTest extends TestCase
         $this->assertTrue($product->categories->contains($category->id));
     }
 
+    public function test_can_delete_product()
+    {
+        $category = Category::create(['name' => 'Deletable Category']);
+        $product = Product::create([
+            'name' => 'Product to Delete',
+            'sku' => 'DEL123',
+            'description' => 'This product will be deleted.',
+            'price' => 99.99,
+            'stock' => 10
+        ]);
+
+        $product->categories()->attach($category->id);
+
+        $response = $this->deleteJson('/api/products/' . $product->id);
+
+        $response->assertStatus(204);
+
+        $this->assertDatabaseMissing('products', [
+            'id' => $product->id,
+            'sku' => 'DEL123'
+        ]);
+
+        $this->assertDatabaseMissing('category_product', [
+            'product_id' => $product->id,
+            'category_id' => $category->id
+        ]);
+    }
+
     public function test_validation_price_must_be_positive()
     {
         // Create a category
