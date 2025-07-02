@@ -1,61 +1,106 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# OVOL Fullstack Laravel Developer Test Submission
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project is a submission for the OVOL Fullstack Laravel Developer Test. It implements a simple product management module for a WebShop's admin backend, complete with a REST API and a Laravel Blade frontend.
 
-## About Laravel
+**Repository:** [https://github.com/JPPinho/ovolstore](https://github.com/JPPinho/ovolstore)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Setup and Installation Instructions
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+This project is configured to be run easily and quickly using **Laravel Herd**.
 
-## Learning Laravel
+### Prerequisites
+*   Git
+*   [Laravel Herd](https://herd.laravel.com/) (macOS or Windows)
+*   Composer
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Step-by-Step Guide
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1.  **Clone the Repository:**
+    Open your terminal and clone the project into your Herd directory.
+    ```bash
+    git clone https://github.com/JPPinho/ovolstore.git
+    ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2.  **Navigate to the Project Directory:**
+    ```bash
+    cd ovolstore
+    ```
 
-## Laravel Sponsors
+3.  **Install PHP Dependencies:**
+    ```bash
+    composer install
+    ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+4.  **Create Your Environment File:**
+    Copy the example environment file. Herd will automatically configure the necessary server settings.
+    ```bash
+    cp .env.example .env
+    ```
 
-### Premium Partners
+5.  **Configure the Database in `.env`:**
+    Laravel Herd automatically creates a database named after the project folder. Open the `.env` file and ensure your database connection is set up as follows:
+    ```env
+    DB_CONNECTION=sqlite
+    ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+6.  **Generate Application Key:**
+    ```bash
+    php artisan key:generate
+    ```
 
-## Contributing
+7.  **Run Migrations and Seed the Database:**
+    This command will create all the necessary tables and populate the `categories` table with sample data.
+    ```bash
+    php artisan migrate --seed
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+8.  **Visit Your Site:**
+    Herd will now be serving your application. You can access it in your browser at:
+    **http://ovolstore.test**
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Usage
 
-## Security Vulnerabilities
+### Frontend Admin Panel
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+The simple frontend provides a user interface to manage products.
 
-## License
+*   **Homepage:** [http://ovolstore.test](http://ovolstore.test) - Displays a welcome page with a link to the admin panel.
+*   **Admin Products Page:** [http://ovolstore.test/admin/products](http://ovolstore.test/admin/products) - The main interface to list, create, edit, and delete products.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Backend REST API
+
+The API provides endpoints for programmatic access to the product and category data. Use the provided Postman collection for easy interaction.
+
+#### Postman Collection
+A Postman collection is included in the root of the project: `ovolstore.postman_collection.json`. Import this file into Postman to get a pre-configured set of requests for all API endpoints.
+
+#### API Endpoints
+All API routes are prefixed with `/api`.
+
+**Categories**
+*   `GET /api/categories`: Fetches all categories in a nested tree structure.
+*   `POST /api/categories`: Creates a new category.
+*   `GET /api/categories/{id}`: Shows a specific category.
+*   `PUT /api/categories/{id}`: Updates a category.
+*   `DELETE /api/categories/{id}`: Deletes a category.
+
+**Products**
+*   `GET /api/products`: Lists all products (paginated).
+*   `POST /api/products`: Creates a new product and assigns categories.
+*   `GET /api/products/{id}`: Shows a specific product with its assigned categories.
+*   `PUT /api/products/{id}`: Updates a product's details and/or categories.
+*   `DELETE /api/products/{id}`: Deletes a product.
+
+---
+
+## Running Tests
+
+To ensure application reliability and data integrity, a suite of tests has been included. You can run all tests using the following Artisan command:
+
+```bash
+php artisan test
+```
