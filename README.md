@@ -14,6 +14,7 @@ This project is configured to be run easily and quickly using **Laravel Herd**.
 *   Git
 *   [Laravel Herd](https://herd.laravel.com/) (macOS or Windows)
 *   Composer
+*   MySql Server
 
 ### Step-by-Step Guide
 
@@ -42,7 +43,12 @@ This project is configured to be run easily and quickly using **Laravel Herd**.
 5.  **Configure the Database in `.env`:**
     Laravel Herd automatically creates a database named after the project folder. Open the `.env` file and ensure your database connection is set up as follows:
     ```env
-    DB_CONNECTION=sqlite
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=ovolstore
+    DB_USERNAME=root
+    DB_PASSWORD=
     ```
 
 6.  **Generate Application Key:**
