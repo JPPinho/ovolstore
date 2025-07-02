@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 
-@section('title', 'Products')
+@section('title', 'Product')
 
-@section('header', 'Products')
+@section('header', 'Product')
 
 @section('content')
     <div class="mb-3">

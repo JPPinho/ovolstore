@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ProductController extends Controller
@@ -16,23 +17,11 @@ class ProductController extends Controller
         return ProductResource::collection($products);
     }
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'sku' => 'required|string|max:255|unique:products',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'categories' => 'required|array',
-            'categories.*' => 'exists:categories,id'
-        ]);
+        $product = Product::create($request->validated());
 
-        $product = Product::create($request->only([
-            'name', 'sku', 'description', 'price', 'stock'
-        ]));
-
-        $product->categories()->attach($request->categories);
+        $product->categories()->attach($request->validated('categories'));
 
         return (new ProductResource($product->load('categories')))
             ->response()
@@ -45,23 +34,9 @@ class ProductController extends Controller
         return new ProductResource($product);
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        $product = Product::findOrFail($id);
-
-        $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'sku' => 'sometimes|required|string|max:255|unique:products,sku,' . $id,
-            'description' => 'nullable|string',
-            'price' => 'sometimes|required|numeric|min:0',
-            'stock' => 'sometimes|required|integer|min:0',
-            'categories' => 'sometimes|required|array',
-            'categories.*' => 'exists:categories,id'
-        ]);
-
-        $product->update($request->only([
-            'name', 'sku', 'description', 'price', 'stock'
-        ]));
+        $product->update($request->validated());
 
         if ($request->has('categories')) {
             $product->categories()->sync($request->categories);
