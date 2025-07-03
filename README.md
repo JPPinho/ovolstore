@@ -97,7 +97,7 @@ Follow these steps to build the Docker images and set up the application for the
     cp app/.env.example app/.env
     ```
 
-4. **Unzip the .docker.zip file that's inside /app to one level higher, alongside /app**
+4. **Unzip the .docker.zip file that's inside /app to one level higher, alongside /app. Do the same thing to docker-compose.yaml**
 
 5. **Build and Run the Docker Containers:**
     This single command will build all custom images and start the Nginx, PHP, MySQL, and Vite services in the background. The first run will take several minutes.
