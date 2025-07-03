@@ -97,26 +97,28 @@ Follow these steps to build the Docker images and set up the application for the
     cp app/.env.example app/.env
     ```
 
-4.  **Build and Run the Docker Containers:**
+4. **Unzip the .docker.zip file that's inside /app to one level higher, alongside /app**
+
+5. **Build and Run the Docker Containers:**
     This single command will build all custom images and start the Nginx, PHP, MySQL, and Vite services in the background. The first run will take several minutes.
     ```bash
     docker-compose up -d --build
     ```
 
-5.  **Install Backend & Frontend Dependencies:**
+6.  **Install Backend & Frontend Dependencies:**
     Run Composer and NPM to install all required packages *inside* the application container.
     ```bash
     docker-compose exec backend composer install
     docker-compose exec backend npm install
     ```
 
-6.  **Generate the Application Key:**
+7.  **Generate the Application Key:**
     This is a required security step for Laravel.
     ```bash
     docker-compose exec backend php artisan key:generate
     ```
 
-7.  **Run Database Migrations:**
+8.  **Run Database Migrations:**
     This will create the database schema and populate it with sample data.
     ```bash
     docker-compose exec backend php artisan migrate --seed
