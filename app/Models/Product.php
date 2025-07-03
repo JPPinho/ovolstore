@@ -12,4 +12,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class);
     }
+
+    public function isOutOfStock(): bool
+    {
+        return $this->stock <= 0;
+    }
 }

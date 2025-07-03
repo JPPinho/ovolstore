@@ -9,9 +9,6 @@ class CategoryResource extends JsonResource
 {
     /**
      * Transform the category resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request  The HTTP request
-     * @return array<string, mixed>  The transformed category data
      */
     public function toArray(Request $request): array
     {

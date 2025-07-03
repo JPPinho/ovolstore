@@ -3,52 +3,59 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Http\Request;
 
-class ProductController extends Controller
-{
+class ProductController extends Controller {
 
+    /**
+     * GET - Web method for displaying a list of products.
+     *
+     */
     public function index()
     {
         $products = Product::with('categories')->get();
         return view('admin.products.index', compact('products'));
     }
 
+    /**
+     * GET - Web method for displaying a form for creating a new product.
+     *
+     */
     public function create()
     {
         $categories = Category::all();
         return view('admin.products.create', compact('categories'));
     }
 
-    public function store(Request $request)
+    /**
+     * POST - Web method for storing a new product.
+     *
+     */
+    public function store(StoreProductRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'sku' => 'required|string|max:255|unique:products',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'categories' => 'required|array',
-            'categories.*' => 'exists:categories,id'
-        ]);
-
-        $product = Product::create($request->only([
-            'name', 'sku', 'description', 'price', 'stock'
-        ]));
-
-        $product->categories()->attach($request->categories);
+        $product = Product::create($request->validated());
+        $product->categories()->attach($request->validated('categories'));
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Product created successfully.');
     }
 
+    /**
+     * GET - Web method for displaying a single product.
+     *
+     */
     public function show(string $id)
     {
         return redirect()->route('admin.products.edit', $id);
     }
 
+    /**
+     * GET - Web method for displaying a form for editing a product.
+     *
+     */
     public function edit(string $id)
     {
         $product = Product::with('categories')->findOrFail($id);
@@ -57,23 +64,16 @@ class ProductController extends Controller
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
-    public function update(Request $request, string $id)
-    {
-        $product = Product::findOrFail($id);
+    /**
+     * PUT - Web method for updating a product.
+     *
+     */
+    public function update(
+        UpdateProductRequest $request,
+        Product              $product
+    ) {
+        $product->update($request->validated());
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'sku' => 'required|string|max:255|unique:products,sku,' . $id,
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'categories' => 'required|array',
-            'categories.*' => 'exists:categories,id'
-        ]);
-
-        $product->update($request->only([
-            'name', 'sku', 'description', 'price', 'stock'
-        ]));
 
         $product->categories()->sync($request->categories);
 
@@ -81,6 +81,10 @@ class ProductController extends Controller
             ->with('success', 'Product updated successfully.');
     }
 
+    /**
+     * DELETE - Web method for deleting a product.
+     *
+     */
     public function destroy(string $id)
     {
         $product = Product::findOrFail($id);

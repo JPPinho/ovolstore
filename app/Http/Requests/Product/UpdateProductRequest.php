@@ -19,7 +19,6 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        // Get the product's ID from the route parameter (e.g., /api/products/123)
         $productId = $this->route('product')->id;
 
         return [
